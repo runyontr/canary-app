@@ -17,9 +17,10 @@ node {
                  go version
                  go env
                  env
-                 mkdir -p \$GOPATH/src/${srcdir}
-                 ln -s ${workspace} \$GOPATH/src/${srcdir}
-                 cd  \$GOPATH/src/${srcdir}
+                 mkdir -p \$HOME/go/src/${srcdir}
+                 ln -s ${workspace} \$HOME/go/src/${srcdir}
+                 cd  \$HOME/go/src/${srcdir}
+                 export GOPATH=\$HOME/go
                  go test ./...
                   """
          }
