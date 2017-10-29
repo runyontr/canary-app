@@ -48,8 +48,9 @@ node {
               go env
              cd  \$HOME/go/src/${srcdir}
              CGO_ENABLED=0 GOOS=linux go build -o app main.go
-             docker build -t ${image}:${tag} .
+             docker build -t  .
            """
+           app = docker.build("${image}:${tag}")
        }
 
      }
@@ -61,6 +62,9 @@ node {
 
      stage('Push image to registry'){
          sh("docker push ${image}:${tag}")
+         docker.withRegistry('https://registry.hub.docker.com', 'Dockerhub') {
+                     app.push()
+                 }
      }
 
      stage("Deploy Application"){
