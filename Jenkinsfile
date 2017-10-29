@@ -7,6 +7,9 @@ node {
   checkout scm
 
   stage 'Build image'
+
+  sh 'echo hi'
+
   sh("CGO_ENABLED=0 GOOS=linux go build -o app main.go"
   sh("docker build -t ${image}:${tag} .")
 
