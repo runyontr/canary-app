@@ -8,7 +8,7 @@ node {
 // Install the desired Go version
   def root = tool name: 'Go 1.8', type: 'go'
    def workspace = pwd()
-   
+
   checkout scm
   stage('Run Go tests') {
       // Export environment variables pointing to the directory where Go was installed
@@ -17,9 +17,9 @@ node {
                  go version
                  go env
                  env
-                 mkdir -p \${env.GOPATH}/src/${srcdir}
-                 ln -s ${workspace} ${env.GOPATH}/src/${srcdir}
-                 cd  ${env.GOPATH}/src/${srcdir}
+                 mkdir -p \$GOPATH/src/${srcdir}
+                 ln -s ${workspace} \$GOPATH/src/${srcdir}
+                 cd  \$GOPATH/src/${srcdir}
                  go test ./...
                   """
          }
