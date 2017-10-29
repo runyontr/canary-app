@@ -6,13 +6,33 @@ node {
 
   checkout scm
 
+  stage 'Run Go tests'
+  // Export environment variables pointing to the directory where Go was installed
+    withEnv(["GOROOT=${root}", "PATH+GO=${root}/bin"]) {
+        sh 'go version'
+        sh 'go env'
+        sh("go test ./...")
+    }
+
+
   stage 'Build image'
 
-  sh("CGO_ENABLED=0 GOOS=linux go build -o app main.go")
+  // Install the desired Go version
+  def root = tool name: 'Go 1.8', type: 'go'
+
+  // Export environment variables pointing to the directory where Go was installed
+  withEnv(["GOROOT=${root}", "PATH+GO=${root}/bin"]) {
+      sh 'go version'
+      sh 'go env'
+
+
+      sh("CGO_ENABLED=0 GOOS=linux go build -o app main.go")
+
+  }
+  
   sh("docker build -t ${image}:${tag} .")
 
-  stage 'Run Go tests'
-  sh("go test ./...")
+
 
   stage 'Push image to registry'
   sh("docker push ${image}:${tag}")
