@@ -48,7 +48,6 @@ node {
               go env
              cd  \$HOME/go/src/${srcdir}
              CGO_ENABLED=0 GOOS=linux go build -o app main.go
-             docker build -t  .
            """
            app = docker.build("${image}:${tag}")
        }
