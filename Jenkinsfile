@@ -15,9 +15,10 @@ node {
             sh """
                  go version
                  go env
-                 mkdir -p \$GOPATH/src/${srcdir}
-                 ln -s \$(realpath .) \$GOPATH/src/${srcdir}
-                 cd  \$GOPATH/src/${srcdir}
+                 env
+                 mkdir -p \${GOPATH}/src/${srcdir}
+                 ln -s \$(realpath .) ${GOPATH}/src/${srcdir}
+                 cd  ${GOPATH}/src/${srcdir}
                  go test ./...
                   """
          }
@@ -34,7 +35,7 @@ node {
            sh """
               go version
               go env
-             cd  \$GOPATH/src/${srcdir}
+             cd  ${GOPATH}/src/${srcdir}
              CGO_ENABLED=0 GOOS=linux go build -o app main.go
              docker build -t ${image}:${tag} .
            """
