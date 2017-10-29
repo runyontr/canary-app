@@ -10,9 +10,14 @@ node {
   stage 'Run Go tests'
   // Export environment variables pointing to the directory where Go was installed
     withEnv(["GOROOT=${root}", "PATH+GO=${root}/bin"]) {
-        sh 'go version'
-        sh 'go env'
-        sh("go test ./...")
+       sh """
+            go version
+            go env
+            mkdir -p \$GOPATH/src/${srcdir}
+            ln -s \$(realpath .) \$GOPATH/src/${srcdir}
+            cd  \$GOPATH/src/${srcdir}
+            go test ./...
+             """
     }
 
 
@@ -27,8 +32,6 @@ node {
       sh """
          go version
          go env
-         mkdir -p \$GOPATH/src/${srcdir}
-         ln -s \$(realpath .) \$GOPATH/src/${srcdir}
         cd  \$GOPATH/src/${srcdir}
         CGO_ENABLED=0 GOOS=linux go build -o app main.go
         docker build -t ${image}:${tag} .
