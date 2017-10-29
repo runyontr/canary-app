@@ -16,8 +16,8 @@ node {
                  go version
                  go env
                  env
-                 mkdir -p ${env.GOPATH}/src/${srcdir}
-                 ln -s $(realpath .) ${env.GOPATH}/src/${srcdir}
+                 mkdir -p \${env.GOPATH}/src/${srcdir}
+                 ln -s ${realpath .} ${env.GOPATH}/src/${srcdir}
                  cd  ${env.GOPATH}/src/${srcdir}
                  go test ./...
                   """
