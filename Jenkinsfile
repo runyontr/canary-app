@@ -1,5 +1,5 @@
 node {
-  def image = runyonsolutions/appinfo
+  def image = 'runyonsolutions/appinfo'
   def tag = ${env.BRANCH_NAME}-${env.BUILD_NUMBER}
 
 
