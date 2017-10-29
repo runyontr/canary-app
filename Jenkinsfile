@@ -24,7 +24,7 @@ node {
          withEnv(["GOROOT=${root}", "PATH+GO=${root}/bin"]) {
             sh """
                  mkdir -p \$HOME/go/src/${srcdir}
-                 ln -s ${workspace}/ \$HOME/go/src/${srcdir}/
+                 ln -s ${workspace}/* \$HOME/go/src/${srcdir}/
                  ls -la
                  cd  \$HOME/go/src/${srcdir}
                  ls -la
