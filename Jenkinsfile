@@ -4,9 +4,13 @@ node {
 
   def srcdir = 'github.com/runyontr/canary-app'
 
+   stage('tests'){
+    sh "ls -la"
+   }
+
 
 // Install the desired Go version
-  def root = tool name: 'Go 1.8', type: 'go'
+    def root = tool name: 'Go 1.8', type: 'go'
    def workspace = pwd()
 
   checkout scm
@@ -14,13 +18,15 @@ node {
       // Export environment variables pointing to the directory where Go was installed
          withEnv(["GOROOT=${root}", "PATH+GO=${root}/bin"]) {
             sh """
-                 go version
-                 go env
-                 env
                  mkdir -p \$HOME/go/src/${srcdir}
                  ln -s ${workspace} \$HOME/go/src/${srcdir}
+                 ls -la
                  cd  \$HOME/go/src/${srcdir}
+                 ls -la
                  export GOPATH=\$HOME/go
+                 go version
+                  go env
+                  env
                  go test ./...
                   """
          }
