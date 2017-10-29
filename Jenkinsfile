@@ -5,38 +5,46 @@ node {
   def srcdir = 'github.com/runyontr/canary-app'
 
 
-  checkout scm
-
-  stage 'Run Go tests'
-  // Export environment variables pointing to the directory where Go was installed
-    withEnv(["GOROOT=${root}", "PATH+GO=${root}/bin"]) {
-       sh """
-            go version
-            go env
-            mkdir -p \$GOPATH/src/${srcdir}
-            ln -s \$(realpath .) \$GOPATH/src/${srcdir}
-            cd  \$GOPATH/src/${srcdir}
-            go test ./...
-             """
-    }
-
-
-  stage 'Build image'
-
-  // Install the desired Go version
+// Install the desired Go version
   def root = tool name: 'Go 1.8', type: 'go'
 
-  // Export environment variables pointing to the directory where Go was installed
-  withEnv(["GOROOT=${root}", "PATH+GO=${root}/bin"]) {
+  checkout scm
 
-      sh """
-         go version
-         go env
-        cd  \$GOPATH/src/${srcdir}
-        CGO_ENABLED=0 GOOS=linux go build -o app main.go
-        docker build -t ${image}:${tag} .
-      """
+  stage 'Run Go tests' {
+   // Export environment variables pointing to the directory where Go was installed
+      withEnv(["GOROOT=${root}", "PATH+GO=${root}/bin"]) {
+         sh """
+              go version
+              go env
+              mkdir -p \$GOPATH/src/${srcdir}
+              ln -s \$(realpath .) \$GOPATH/src/${srcdir}
+              cd  \$GOPATH/src/${srcdir}
+              go test ./...
+               """
+      }
+
+
   }
+
+
+
+  stage 'Build image' {
+   // Export environment variables pointing to the directory where Go was installed
+    withEnv(["GOROOT=${root}", "PATH+GO=${root}/bin"]) {
+
+        sh """
+           go version
+           go env
+          cd  \$GOPATH/src/${srcdir}
+          CGO_ENABLED=0 GOOS=linux go build -o app main.go
+          docker build -t ${image}:${tag} .
+        """
+    }
+
+  }
+
+  
+
 
 
 
