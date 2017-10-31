@@ -58,7 +58,7 @@ node {
 
      stage('Push image to registry'){
          sh("docker push ${image}:${tag}")
-         docker.withRegistry('registry.hub.docker.com', 'Dockerhub') {
+         docker.withRegistry('docker.io', 'Dockerhub') {
                      app.push()
                  }
      }
