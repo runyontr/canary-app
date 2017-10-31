@@ -52,11 +52,11 @@ node {
 
 
      stage("Deploy Application"){
-     //Update the image in the deployment spec
-          sh("sed -i.bak 's#${image}#${image}:${tag}#' ./k8s/deployment.yaml")
+        //Update the image in the deployment spec
+        sh("sed -i.bak 's#${image}#${image}:${tag}#' ./k8s/deployment.yaml")
 
 
-          switch (env.BRANCH_NAME) {
+        switch (env.BRANCH_NAME) {
             // Roll out to canary environment
             case "canary":
                 // Change deployed image in canary to the one we just built
@@ -65,34 +65,32 @@ node {
 
                 sh("sed -i.bak 's#name:  appinfo#name:  appinfo-canary#s")
 
-
-
                 //change the release value to be canary
                 sh("sed -i.bak 's#release:  stable#release:  canary#' ./k8s/deployment.yaml")
 
-                sh("echo ./k8s/deployment.yaml")
+                sh("cat ./k8s/deployment.yaml")
 
+                sh("kubectl apply -f k8s/deployment.yaml")
 
-
-        //        sh("kubectl --namespace=production apply -f k8s/services/")
-        //        sh("kubectl --namespace=production apply -f k8s/canary/")
-        //        sh("echo http://`kubectl --namespace=production get service/${feSvcName} --output=json | jq -r '.status.loadBalancer.ingress[0].ip'` > ${feSvcName}")
                 break
 
             // Roll out to production
             case "master":
                 // Change deployed image in canary to the one we just built
                 sh("echo hi master")
-                sh("echo ./k8s/deployment.yaml")
+                sh("cat ./k8s/deployment.yaml")
+                sh("kubectl apply -f k8s/deployment.yaml")
+                sh("kubectl apply -f k8s/service.yaml")
+
+                //cleanup the canary build
+                sh("kubectl delete deployment appinfo-canary")
 
                 break
 
             // All other branches shouldn't be deployed
             default:
 
-                sh("echo 'Not deploying application")
+                sh("echo 'Not deploying application'")
           } //switch
      } //stage
-
-
 } //nodes
