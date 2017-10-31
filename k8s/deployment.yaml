@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: appinfo-containers
-        image: runyonsolutions/appinfo
+        image: runyonsolutions/appinfo:IMAGE_TAG
         ports:
         - containerPort: 8080
         env:

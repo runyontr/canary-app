@@ -53,7 +53,7 @@ node {
 
      stage("Deploy Application"){
         //Update the image in the deployment spec
-        sh("sed -i 's/${image}/${image}:${tag}/g' ./k8s/deployment.yaml")
+        sh("sed -i 's/IMAGE_TAG/${tag}/g' ./k8s/deployment.yaml")
 
 
         switch (env.BRANCH_NAME) {
