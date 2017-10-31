@@ -53,7 +53,7 @@ node {
 
      stage("Deploy Application"){
         //Update the image in the deployment spec
-        sh("sed -i.bak 's#${image}#${image}:${tag}#' ./k8s/deployment.yaml")
+        sh("sed -i 's/${image}/${image}:${tag}/g' ./k8s/deployment.yaml")
 
 
         switch (env.BRANCH_NAME) {
@@ -63,10 +63,10 @@ node {
                 sh("echo Hi this is the canary branch")
                 //Change the name of things to be appinfo-canary
 
-                sh("sed -i.bak 's#name:  appinfo#name:  appinfo-canary#s")
+                sh("sed -i 's/name: appinfo/name: appinfo-canary/g' ./k8s/deployment.yaml")
 
                 //change the release value to be canary
-                sh("sed -i.bak 's#release:  stable#release:  canary#' ./k8s/deployment.yaml")
+                sh("sed -i 's#release: stable#release: canary#' ./k8s/deployment.yaml")
 
                 sh("cat ./k8s/deployment.yaml")
 
@@ -90,7 +90,7 @@ node {
             // All other branches shouldn't be deployed
             default:
 
-                sh("echo 'Not deploying application'")
+                sh("echo Not deploying application")
           } //switch
      } //stage
 } //nodes
