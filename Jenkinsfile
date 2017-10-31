@@ -25,13 +25,8 @@ node {
             sh """
                  mkdir -p \$HOME/go/src/${srcdir}
                  ln -s ${workspace}/* \$HOME/go/src/${srcdir}/
-                 ls -la
                  cd  \$HOME/go/src/${srcdir}
-                 ls -la
                  export GOPATH=\$HOME/go
-                 go version
-                  go env
-                  env
                  go test ./...
                   """
          }
@@ -44,8 +39,6 @@ node {
        withEnv(["GOROOT=${root}", "PATH+GO=${root}/bin"]) {
 
            sh """
-              go version
-              go env
              cd  \$HOME/go/src/${srcdir}
              CGO_ENABLED=0 GOOS=linux go build -o app main.go
            """
@@ -57,7 +50,7 @@ node {
 
 
      stage('Push image to registry'){
-         docker.withRegistry('docker.io', 'Dockerhub') {
+         docker.withRegistry('https://registry.hub.docker.com', 'Dockerhub') {
                      app.push()
                  }
      }
