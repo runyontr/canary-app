@@ -34,7 +34,7 @@ node {
 
 
 
-     stage('Build image') {
+     stage('Build and Push Image') {
       // Export environment variables pointing to the directory where Go was installed
        withEnv(["GOROOT=${root}", "PATH+GO=${root}/bin"]) {
 
@@ -42,18 +42,14 @@ node {
              cd  \$HOME/go/src/${srcdir}
              CGO_ENABLED=0 GOOS=linux go build -o app main.go
            """
-           app = docker.build("${image}:${tag}")
+            docker.withRegistry('https://registry.hub.docker.com', 'Dockerhub') {
+                app = docker.build("${image}:${tag}")
+                app.push()
+            }
        }
 
      }
 
-
-
-     stage('Push image to registry'){
-         docker.withRegistry('https://registry.hub.docker.com', 'Dockerhub') {
-                     app.push()
-                 }
-     }
 
      stage("Deploy Application"){
      //Update the image in the deployment spec
