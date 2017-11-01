@@ -47,10 +47,10 @@ node {
 
      stage("Deploy Application"){
      withEnv(['PATH+JENKINSHOME=/home/jenkins/bin']) {
+        git_commit = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
         //Update the image in the deployment spec
         sh("sed -i 's/IMAGE_TAG/${tag}/g' ./k8s/deployment.yaml")
-        sh("export GIT_COMMIT=`git rev-parse HEAD`")
-        sh("sed -i 's/GITCOMMIT/\$GIT_COMMIT/g' ./k8s/deployment.yaml")
+        sh("sed -i 's/GITCOMMIT/${git_commit}/g' ./k8s/deployment.yaml")
 
         switch (env.BRANCH_NAME) {
             // Roll out to canary environment
