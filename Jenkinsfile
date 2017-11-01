@@ -15,7 +15,7 @@ node {
     sh """
         curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.8.0/bin/linux/amd64/kubectl
         chmod +x kubectl
-        mv kubectl /usr/local/bin
+        sudo mv kubectl /usr/local/bin
         kubectl version --client
 
         ls -la /usr/local/bin
