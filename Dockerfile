@@ -2,6 +2,6 @@ FROM scratch
 
 ADD app /
 
-ENTRYPOINT /app
+CMD ["/app"]
 
 EXPOSE 8080
