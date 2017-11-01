@@ -13,7 +13,7 @@ node {
 
     //This assumes there's a kubectl sidecar
     sh """
-        curl https://storage.googleapis.com/kubernetes-release/release/v1.8.0/bin/linux/amd64/kubectl
+        curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.8.0/bin/linux/amd64/kubectl
         chmod +x kubectl
         mv kubectl /usr/local/bin
         kubectl version --client
