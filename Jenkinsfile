@@ -4,30 +4,26 @@ node {
 
   def srcdir = 'github.com/runyontr/canary-app'
 
-
-    environment {
-        PATH = "$HOME/bin:$PATH"
-      }
-
    stage('kubectl configuration'){
+    withEnv(['PATH+JENKINSHOME=/home/jenkins/bin']) {
 
-    //This assumes there's a kubectl sidecar
-    sh """
-        curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.8.0/bin/linux/amd64/kubectl
-        chmod +x kubectl
-        mkdir -p \$HOME/bin
-        mv kubectl \$HOME/bin
-        ls -la \$HOME/bin
-        echo $PATH
-         kubectl version --client
-        kubectl config set-cluster default-cluster --server=https://kubernetes --certificate-authority=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-        kubectl config set-credentials default-admin --certificate-authority=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt --token="\$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)"
-        kubectl config set-context default-system --cluster=default-cluster
-        kubectl config use-context default-system
-        kubectl get pods
+        //This assumes there's a kubectl sidecar
+        sh """
+            curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.8.0/bin/linux/amd64/kubectl
+            chmod +x kubectl
+            mkdir -p /home/jenkins/bin
+            mv kubectl /home/jenkins/bin
+            ls -la /home/jenkins/bin
+            echo $PATH
+             kubectl version --client
+            kubectl config set-cluster default-cluster --server=https://kubernetes --certificate-authority=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+            kubectl config set-credentials default-admin --certificate-authority=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt --token="\$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)"
+            kubectl config set-context default-system --cluster=default-cluster
+            kubectl config use-context default-system
+            kubectl get pods
 
-    """
-
+        """
+    }
    }
 
 
