@@ -11,7 +11,7 @@ node {
     //This assumes there's a kubectl sidecar
     sh """
         kubectl config set-cluster default-cluster --server=https://kubernetes --certificate-authority=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-        kubectl config set-credentials default-admin --certificate-authority=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt --token="$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)"
+        kubectl config set-credentials default-admin --certificate-authority=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt --token="\$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)"
         kubectl config set-context default-system --cluster=default-cluster
         kubectl config use-context default-system
         kubectl get pods
