@@ -11,7 +11,7 @@ node {
           echo $PATH
           pwd
           ls -la
-          ls /home/jenkins/bin
+          ls /usr/local/bin
           kubectl get pods
       """
    }
