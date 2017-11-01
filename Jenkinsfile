@@ -13,6 +13,11 @@ node {
 
     //This assumes there's a kubectl sidecar
     sh """
+        curl https://storage.googleapis.com/kubernetes-release/release/v1.8.0/bin/linux/amd64/kubectl
+        chmod +x kubectl
+        mv kubectl /usr/local/bin
+        kubectl version --client
+
         ls -la /usr/local/bin
         echo $PATH
         kubectl config set-cluster default-cluster --server=https://kubernetes --certificate-authority=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
