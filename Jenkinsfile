@@ -6,7 +6,7 @@ node {
 
 
     environment {
-        PATH = "/usr/local/bin:$PATH"
+        PATH = "$HOME/bin:$PATH"
       }
 
    stage('kubectl configuration'){
@@ -15,7 +15,8 @@ node {
     sh """
         curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.8.0/bin/linux/amd64/kubectl
         chmod +x kubectl
-        sudo mv kubectl /usr/local/bin
+        mkdir -p \$HOME/bin
+        mv kubectl \$HOME/bin
         kubectl version --client
 
         ls -la /usr/local/bin
