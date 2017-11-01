@@ -16,15 +16,17 @@ node {
             ls -la /home/jenkins/bin
             echo $PATH
              kubectl version --client
-            kubectl config set-cluster default-cluster --server=https://kubernetes --certificate-authority=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-            kubectl config set-credentials default-admin --certificate-authority=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt --token="\$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)"
-            kubectl config set-context default-system --cluster=default-cluster
-            kubectl config use-context default-system
             kubectl get pods
 
         """
     }
    }
+
+//maybe i dont need these?
+//kubectl config set-cluster default-cluster --server=https://kubernetes --certificate-authority=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+//              kubectl config set-credentials default-admin --certificate-authority=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt --token="\$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)"
+//              kubectl config set-context default-system --cluster=default-cluster
+//              kubectl config use-context default-system
 
 
 // Install the desired Go version
