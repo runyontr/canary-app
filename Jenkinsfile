@@ -12,9 +12,9 @@ node {
   stage('Run Go tests') {
   // Export environment variables pointing to the directory where Go was installed
         sh """
-             mkdir -p \$HOME/go/src/${srcdir}
+             mkdir -p /go/src/${srcdir}
              ln -s ${workspace}/* /go/src/${srcdir}/
-             cd  \$HOME/go/src/${srcdir}
+             cd  /go/src/${srcdir}
              go test ./...
               """
     }
