@@ -15,6 +15,7 @@ spec:
       labels:
         app: appinfo
         release: stable
+        gitcommit: GITCOMMIT
     spec:
       containers:
       - name: appinfo-containers
