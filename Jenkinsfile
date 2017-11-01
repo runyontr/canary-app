@@ -11,14 +11,12 @@ node {
   def workspace = pwd()
   stage('Run Go tests') {
   // Export environment variables pointing to the directory where Go was installed
-     withEnv(["GOROOT=${root}", "PATH+GO=${root}/bin"]) {
         sh """
              mkdir -p \$HOME/go/src/${srcdir}
              ln -s ${workspace}/* /go/src/${srcdir}/
              cd  \$HOME/go/src/${srcdir}
              go test ./...
               """
-        }
     }
 
 
