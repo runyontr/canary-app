@@ -1,4 +1,4 @@
-package canary_app
+package main
 
 import (
 	"flag"
