@@ -17,39 +17,26 @@ node {
     }
    }
 
-//maybe i dont need these?
-//kubectl config set-cluster default-cluster --server=https://kubernetes --certificate-authority=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-//              kubectl config set-credentials default-admin --certificate-authority=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt --token="\$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)"
-//              kubectl config set-context default-system --cluster=default-cluster
-//              kubectl config use-context default-system
-
-
 // Install the desired Go version
 
 
   checkout scm
 
-  stage('tests'){
-      sh "ls -la"
-
-
-
       def root = tool name: 'Go 1.8', type: 'go'
-       def workspace = pwd()
+      def workspace = pwd()
   stage('Run Go tests') {
-      // Export environment variables pointing to the directory where Go was installed
-         withEnv(["GOROOT=${root}", "PATH+GO=${root}/bin"]) {
-            sh """
-                 mkdir -p \$HOME/go/src/${srcdir}
-                 ln -s ${workspace}/* \$HOME/go/src/${srcdir}/
-                 cd  \$HOME/go/src/${srcdir}
-                 export GOPATH=\$HOME/go
-                 go test ./...
-                  """
-         }
+  // Export environment variables pointing to the directory where Go was installed
+     withEnv(["GOROOT=${root}", "PATH+GO=${root}/bin"]) {
+        sh """
+             mkdir -p \$HOME/go/src/${srcdir}
+             ln -s ${workspace}/* \$HOME/go/src/${srcdir}/
+             cd  \$HOME/go/src/${srcdir}
+             export GOPATH=\$HOME/go
+             go test ./...
+              """
      }
+ }
 
-    }
 
      stage('Build and Push Image') {
       // Export environment variables pointing to the directory where Go was installed
