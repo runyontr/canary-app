@@ -9,6 +9,7 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"github.com/prometheus/client_golang/prometheus"
 )
 
 func init() {
@@ -48,6 +49,7 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.Handle("/v1/", m)
+	mux.Handle("/metrics", prometheus.Handler())
 
 	httpListener, err := net.Listen("tcp", *httpAddr)
 	if err != nil {
