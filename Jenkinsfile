@@ -45,7 +45,7 @@ node {
            sh """
              cd  \$HOME/go/src/${srcdir}
              CGO_ENABLED=0 GOOS=linux go build -o app main.go
-             cp app \${workspace}/
+             cp app ${workspace}/
            """
             docker.withRegistry('https://registry.hub.docker.com', 'Dockerhub') {
                 app = docker.build("${image}:${tag}")
