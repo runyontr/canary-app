@@ -9,6 +9,8 @@ node {
    stage('Kube test'){
       sh """
           echo $PATH
+          pwd
+          ls -la
           ls /home/jenkins/bin
           kubectl get pods
       """
