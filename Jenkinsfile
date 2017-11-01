@@ -13,7 +13,8 @@ node {
 
     //This assumes there's a kubectl sidecar
     sh """
-        export PATH
+        ls -la /usr/local/bin
+        echo $PATH
         kubectl config set-cluster default-cluster --server=https://kubernetes --certificate-authority=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
         kubectl config set-credentials default-admin --certificate-authority=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt --token="\$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)"
         kubectl config set-context default-system --cluster=default-cluster
