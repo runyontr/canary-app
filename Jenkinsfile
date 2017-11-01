@@ -13,11 +13,6 @@ node {
             chmod +x kubectl
             mkdir -p /home/jenkins/bin
             mv kubectl /home/jenkins/bin
-            ls -la /home/jenkins/bin
-            echo $PATH
-             kubectl version --client
-            kubectl get pods
-
         """
     }
    }
@@ -74,6 +69,7 @@ node {
 
 
      stage("Deploy Application"){
+     withEnv(['PATH+JENKINSHOME=/home/jenkins/bin']) {
         //Update the image in the deployment spec
         sh("sed -i 's/IMAGE_TAG/${tag}/g' ./k8s/deployment.yaml")
 
@@ -114,5 +110,6 @@ node {
 
                 sh("echo Not deploying application")
           } //switch
+       }//env
      } //stage
 } //nodes
