@@ -17,10 +17,9 @@ node {
         chmod +x kubectl
         mkdir -p \$HOME/bin
         mv kubectl \$HOME/bin
-        kubectl version --client
-
-        ls -la /usr/local/bin
+        ls -la \$HOME/bin
         echo $PATH
+         kubectl version --client
         kubectl config set-cluster default-cluster --server=https://kubernetes --certificate-authority=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
         kubectl config set-credentials default-admin --certificate-authority=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt --token="\$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)"
         kubectl config set-context default-system --cluster=default-cluster
