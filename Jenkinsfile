@@ -4,46 +4,27 @@ node {
 
   def srcdir = 'github.com/runyontr/canary-app'
 
-   stage('kubectl configuration'){
-    withEnv(['PATH+JENKINSHOME=/home/jenkins/bin']) {
-
-        //This assumes there's a kubectl sidecar
-        sh """
-            curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.8.0/bin/linux/amd64/kubectl
-            chmod +x kubectl
-            mkdir -p /home/jenkins/bin
-            mv kubectl /home/jenkins/bin
-        """
-    }
-   }
-
 // Install the desired Go version
-
 
   checkout scm
 
-      def root = tool name: 'Go 1.8', type: 'go'
-      def workspace = pwd()
+  def workspace = pwd()
   stage('Run Go tests') {
   // Export environment variables pointing to the directory where Go was installed
      withEnv(["GOROOT=${root}", "PATH+GO=${root}/bin"]) {
         sh """
              mkdir -p \$HOME/go/src/${srcdir}
-             ln -s ${workspace}/* \$HOME/go/src/${srcdir}/
+             ln -s ${workspace}/* /go/src/${srcdir}/
              cd  \$HOME/go/src/${srcdir}
-             export GOPATH=\$HOME/go
              go test ./...
               """
-     }
- }
+        }
+    }
 
 
      stage('Build and Push Image') {
-      // Export environment variables pointing to the directory where Go was installed
-       withEnv(["GOROOT=${root}", "PATH+GO=${root}/bin"]) {
-
            sh """
-             cd  \$HOME/go/src/${srcdir}
+             cd  /go/src/${srcdir}
              CGO_ENABLED=0 GOOS=linux go build -o app main.go
              cp app ${workspace}/
            """
@@ -51,8 +32,6 @@ node {
                 app = docker.build("${image}:${tag}")
                 app.push()
             }
-       }
-
      }
 
 
