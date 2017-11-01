@@ -6,7 +6,17 @@ node {
 
 // Install the desired Go version
 
+   stage('Kube test'){
+      sh """
+          echo $PATH
+          ls /home/jenkins/bin
+          kubectl get pods
+      """
+   }
+
+
   checkout scm
+
 
   def workspace = pwd()
   stage('Run Go tests') {
