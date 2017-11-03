@@ -1,34 +1,23 @@
 node {
+  //This specifies what image to push this application to
   def image = 'runyonsolutions/appinfo'
   def tag = "${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
 
+  //This specifies where to put the repo in the GOPATH to build
   def srcdir = 'github.com/runyontr/canary-app'
 
 // Install the desired Go version
 
-   stage('Kube test'){
-      sh """
-          echo $PATH
-          pwd
-          ls -la
-          ls /usr/local/bin
-          kubectl get pods
-      """
-   }
-
-
   checkout scm
-
 
   def workspace = pwd()
   stage('Run Go tests') {
-  // Export environment variables pointing to the directory where Go was installed
-        sh """
-             mkdir -p /go/src/${srcdir}
-             ln -s ${workspace}/* /go/src/${srcdir}/
-             cd  /go/src/${srcdir}
-             go test ./...
-              """
+    sh """
+         mkdir -p /go/src/${srcdir}
+         ln -s ${workspace}/* /go/src/${srcdir}/
+         cd  /go/src/${srcdir}
+         go test ./...
+          """
     }
 
 
