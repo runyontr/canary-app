@@ -35,7 +35,7 @@ node {
      stage('Build and Push Image') {
            sh """
              cd  /go/src/${srcdir}
-             CGO_ENABLED=0 GOOS=linux go build -o app main.go
+             CGO_ENABLED=0 GOOS=linux go build -o app *.go
              cp app ${workspace}/
            """
             docker.withRegistry('https://registry.hub.docker.com', 'Dockerhub') {
