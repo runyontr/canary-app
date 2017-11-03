@@ -14,7 +14,7 @@ var requestLatency metrics.Histogram
 
 func init(){
 	//make the counters and metrics
-	fieldKeys := []string{"method", "error"}
+	fieldKeys := []string{"method", "error","release"}
 
 	requestCount = kitprometheus.NewCounterFrom(prometheus.CounterOpts{
 		Namespace: "runyontr",
@@ -54,7 +54,7 @@ func NewInstrumentationAppInfoService(svc AppInfoService) AppInfoService{
 //GetAppInfo returns the app info of the running application
 func (s *instrumentationAppInfo) GetAppInfo() (info AppInfo, err error) {
 	defer func(startTime time.Time){
-		requestCount.With("release",info.Release).Add(1)
+		requestCount.With("release",info.Release, "method","GetAppInfo","error",fmt.Sprintf("%v",err)).Add(1)
 		requestLatency.With("release",info.Release, "method","GetAppInfo","error",fmt.Sprintf("%v",err)).Observe(time.Since(startTime).Seconds())
 	}(time.Now())
 	info, err = s.Next.GetAppInfo()
