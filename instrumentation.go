@@ -55,7 +55,7 @@ func NewInstrumentationAppInfoService(svc AppInfoService) AppInfoService{
 func (s *instrumentationAppInfo) GetAppInfo() (info AppInfo, err error) {
 	defer func(startTime time.Time){
 		requestCount.With("release",info.Release, "method","GetAppInfo","error",fmt.Sprintf("%v",err)).Add(1)
-		requestLatency.With("release",info.Release, "method","GetAppInfo","error",fmt.Sprintf("%v",err)).Observe(time.Since(startTime).Seconds())
+		requestLatency.With("release",info.Release, "method","GetAppInfo","error",fmt.Sprintf("%v",err)).Observe(float64(time.Since(startTime)))
 	}(time.Now())
 	info, err = s.Next.GetAppInfo()
 	return
