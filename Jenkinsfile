@@ -14,7 +14,7 @@ node {
   stage('Run Go tests') {
     sh """
          mkdir -p /go/src/${srcdir}
-         ln -s ${workspace}/* /go/src/${srcdir}/
+         ln -sf ${workspace}/* /go/src/${srcdir}/
          cd  /go/src/${srcdir}
          go test ./...
           """
