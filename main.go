@@ -3,12 +3,11 @@ package main
 import (
 	"flag"
 	"github.com/go-kit/kit/log"
-	"github.com/runyontr/k8s-canary/app/service"
-	"github.com/runyontr/k8s-canary/app/transport"
 	"github.com/sirupsen/logrus"
 	"net"
 	"net/http"
 	"os"
+	"github.com/prometheus/client_golang/prometheus"
 )
 
 func init() {
@@ -24,7 +23,6 @@ func init() {
 func main() {
 	//customizations
 	httpAddr := flag.String("http.addr", ":8080", "Address to host server")
-	version := flag.Int("version",1,"Version of app")
 
 	flag.Parse()
 
@@ -38,16 +36,17 @@ func main() {
 		logger = log.With(logger, "caller", log.DefaultCaller)
 	}
 
-	infoService, err := service.New(*version)
+	infoService, err := New()
 
 	if err != nil {
 		logrus.Fatalf("Error creating service: %v", err)
 	}
 
-	m := transport.MakeInfoServiceHandler(infoService, logger)
+	m := MakeInfoServiceHandler(NewInstrumentationAppInfoService(infoService), logger)
 
 	mux := http.NewServeMux()
 	mux.Handle("/v1/", m)
+	mux.Handle("/metrics", prometheus.Handler())
 
 	httpListener, err := net.Listen("tcp", *httpAddr)
 	if err != nil {

@@ -1,41 +1,30 @@
 node {
+  //This specifies what image to push this application to
   def image = 'runyonsolutions/appinfo'
   def tag = "${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
 
+  //This specifies where to put the repo in the GOPATH to build
   def srcdir = 'github.com/runyontr/canary-app'
 
 // Install the desired Go version
 
-   stage('Kube test'){
-      sh """
-          echo $PATH
-          pwd
-          ls -la
-          ls /usr/local/bin
-          kubectl get pods
-      """
-   }
-
-
   checkout scm
-
 
   def workspace = pwd()
   stage('Run Go tests') {
-  // Export environment variables pointing to the directory where Go was installed
-        sh """
-             mkdir -p /go/src/${srcdir}
-             ln -s ${workspace}/* /go/src/${srcdir}/
-             cd  /go/src/${srcdir}
-             go test ./...
-              """
+    sh """
+         mkdir -p /go/src/${srcdir}
+         ln -s ${workspace}/* /go/src/${srcdir}/
+         cd  /go/src/${srcdir}
+         go test ./...
+          """
     }
 
 
      stage('Build and Push Image') {
            sh """
              cd  /go/src/${srcdir}
-             CGO_ENABLED=0 GOOS=linux go build -o app main.go
+             CGO_ENABLED=0 GOOS=linux go build -o app *.go
              cp app ${workspace}/
            """
             docker.withRegistry('https://registry.hub.docker.com', 'Dockerhub') {
@@ -47,9 +36,10 @@ node {
 
      stage("Deploy Application"){
      withEnv(['PATH+JENKINSHOME=/home/jenkins/bin']) {
+        git_commit = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
         //Update the image in the deployment spec
         sh("sed -i 's/IMAGE_TAG/${tag}/g' ./k8s/deployment.yaml")
-
+        sh("sed -i 's/GITCOMMIT/${git_commit}/g' ./k8s/deployment.yaml")
 
         switch (env.BRANCH_NAME) {
             // Roll out to canary environment

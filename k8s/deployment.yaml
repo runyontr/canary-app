@@ -15,6 +15,9 @@ spec:
       labels:
         app: appinfo
         release: stable
+        gitcommit: GITCOMMIT
+      annotations:
+        prometheus.io/scrape: "true"
     spec:
       containers:
       - name: appinfo-containers
