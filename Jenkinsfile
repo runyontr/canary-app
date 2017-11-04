@@ -1,5 +1,5 @@
 node {
-  //This specifies what image to push this application to
+  //This specifies what image tag for the application.  Adjust as needed
   def image = 'runyonsolutions/appinfo'
   def tag = "${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
 
