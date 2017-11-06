@@ -71,7 +71,7 @@ node {
                 sh("kubectl apply -f k8s/service.yaml")
 
                 //cleanup the canary build
-                sh("kubectl delete deployment appinfo-canary")
+                sh("kubectl delete deployment appinfo-canary --ignore-not-found")
 
                 break
 
