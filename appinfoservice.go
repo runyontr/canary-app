@@ -32,7 +32,7 @@ func (s *appInfoBaseline) GetAppInfo() (AppInfo, error) {
 	info.Labels = make(map[string]string)
 
 	info.PodName = os.Getenv("MY_POD_NAME") //custom defined in the deployment spec
-	time.Sleep(3*time.Second)
+	//time.Sleep(3*time.Second)
 	info.Namespace = os.Getenv("MY_POD_NAMESPACE") //custom defined in the deployment spec
 
 	file, err := os.Open("/etc/labels")
