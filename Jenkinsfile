@@ -50,6 +50,9 @@ node {
 
                 sh("sed -i 's/name: appinfo/name: appinfo-canary/g' ./k8s/deployment.yaml")
 
+                //Canary only needs 1 replica
+                sh("sed -i 's/replicas: 3/replicas: 1/g' ./k8s/deployment.yaml")
+
                 //change the release value to be canary
                 sh("sed -i 's#release: stable#release: canary#' ./k8s/deployment.yaml")
 
